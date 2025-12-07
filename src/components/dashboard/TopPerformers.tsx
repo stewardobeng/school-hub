@@ -3,16 +3,32 @@ import { MoreHorizontal } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 
-const performers = [
-  { name: "Enos Schimel", id: "4278", class: "6th Class", score: 98.68, avatar: "" },
-  { name: "Cayla Bergnaum", id: "2347", class: "8th Class", score: 98.22, avatar: "" },
-  { name: "Kathryn Hahn", id: "5940", class: "5th Class", score: 97.0, avatar: "" },
-];
+interface Performer {
+  id: string;
+  first_name: string;
+  last_name: string;
+  grade: string;
+  avg_score: number;
+  exam_count: number;
+}
+
+interface TopPerformersProps {
+  performers?: Performer[];
+}
 
 type Period = "Week" | "Month" | "Year";
 
-export function TopPerformers() {
+export function TopPerformers({ performers: propPerformers = [] }: TopPerformersProps) {
   const [period, setPeriod] = useState<Period>("Week");
+
+  // Transform API data to component format
+  const performers = propPerformers.map((p) => ({
+    name: `${p.first_name} ${p.last_name}`,
+    id: p.id,
+    class: p.grade || "N/A",
+    score: parseFloat(p.avg_score.toFixed(2)),
+    avatar: "",
+  }));
 
   return (
     <div className="chart-card animate-fade-in" style={{ animationDelay: "0.3s" }}>
@@ -55,7 +71,12 @@ export function TopPerformers() {
 
       {/* Performers List */}
       <div className="space-y-3">
-        {performers.map((performer, index) => (
+        {performers.length === 0 ? (
+          <div className="text-center text-muted-foreground py-8 text-sm">
+            No performance data available yet.
+          </div>
+        ) : (
+          performers.map((performer, index) => (
           <div key={index} className="grid grid-cols-5 gap-4 items-center">
             <Avatar className="w-8 h-8">
               <AvatarImage src={performer.avatar} />
@@ -76,7 +97,8 @@ export function TopPerformers() {
               </div>
             </div>
           </div>
-        ))}
+          ))
+        )}
       </div>
     </div>
   );

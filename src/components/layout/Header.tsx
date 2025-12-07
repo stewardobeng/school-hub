@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Search, Bell } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -10,7 +11,7 @@ interface HeaderProps {
 
 export function Header({ title, userName = "John Doe", userAvatar }: HeaderProps) {
   return (
-    <header className="flex items-center justify-between h-16 px-6 bg-card border-b border-border">
+    <header className="sticky top-0 z-50 flex items-center justify-between h-16 px-6 bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/80 border-b border-border">
       <h1 className="text-2xl font-semibold text-foreground">{title}</h1>
       
       <div className="flex items-center gap-4">
@@ -31,12 +32,14 @@ export function Header({ title, userName = "John Doe", userAvatar }: HeaderProps
         </button>
 
         {/* User Avatar */}
-        <Avatar className="w-10 h-10 border-2 border-accent">
-          <AvatarImage src={userAvatar} alt={userName} />
-          <AvatarFallback className="bg-primary text-primary-foreground">
-            {userName.split(' ').map(n => n[0]).join('')}
-          </AvatarFallback>
-        </Avatar>
+        <Link to="/admin/profile">
+          <Avatar className="w-10 h-10 border-2 border-accent cursor-pointer hover:opacity-80 transition-opacity">
+            <AvatarImage src={userAvatar} alt={userName} />
+            <AvatarFallback className="bg-primary text-primary-foreground">
+              {userName.split(' ').map(n => n[0]).join('')}
+            </AvatarFallback>
+          </Avatar>
+        </Link>
       </div>
     </header>
   );

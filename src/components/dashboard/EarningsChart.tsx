@@ -17,23 +17,39 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-const data = [
-  { month: "Jan", earnings: 28000, expense: 18000 },
-  { month: "Feb", earnings: 22000, expense: 15000 },
-  { month: "Mar", earnings: 25000, expense: 20000 },
-  { month: "Apr", earnings: 30000, expense: 18000 },
-  { month: "May", earnings: 18000, expense: 12000 },
-  { month: "Jun", earnings: 15000, expense: 10000 },
-  { month: "Jul", earnings: 20000, expense: 14000 },
-  { month: "Aug", earnings: 35000, expense: 22000 },
-  { month: "Sep", earnings: 25000, expense: 18000 },
-  { month: "Oct", earnings: 22000, expense: 15000 },
-  { month: "Nov", earnings: 28000, expense: 20000 },
-  { month: "Dec", earnings: 20000, expense: 16000 },
-];
+interface EarningsChartProps {
+  data?: Array<{
+    month: string;
+    month_name: string;
+    earnings: number;
+    expenses: number;
+  }>;
+}
 
-export function EarningsChart() {
-  const [year, setYear] = useState("2022");
+export function EarningsChart({ data: propData }: EarningsChartProps) {
+  const [year, setYear] = useState(new Date().getFullYear().toString());
+
+  // Transform API data to chart format
+  const data = propData && propData.length > 0
+    ? propData.map((item) => ({
+        month: item.month_name || item.month,
+        earnings: parseFloat(item.earnings) || 0,
+        expense: parseFloat(item.expenses) || 0,
+      }))
+    : [
+        { month: "Jan", earnings: 0, expense: 0 },
+        { month: "Feb", earnings: 0, expense: 0 },
+        { month: "Mar", earnings: 0, expense: 0 },
+        { month: "Apr", earnings: 0, expense: 0 },
+        { month: "May", earnings: 0, expense: 0 },
+        { month: "Jun", earnings: 0, expense: 0 },
+        { month: "Jul", earnings: 0, expense: 0 },
+        { month: "Aug", earnings: 0, expense: 0 },
+        { month: "Sep", earnings: 0, expense: 0 },
+        { month: "Oct", earnings: 0, expense: 0 },
+        { month: "Nov", earnings: 0, expense: 0 },
+        { month: "Dec", earnings: 0, expense: 0 },
+      ];
 
   return (
     <div className="chart-card animate-fade-in" style={{ animationDelay: "0.1s" }}>
@@ -59,6 +75,7 @@ export function EarningsChart() {
             <SelectItem value="2022">2022</SelectItem>
             <SelectItem value="2023">2023</SelectItem>
             <SelectItem value="2024">2024</SelectItem>
+            <SelectItem value="2025">2025</SelectItem>
           </SelectContent>
         </Select>
       </div>

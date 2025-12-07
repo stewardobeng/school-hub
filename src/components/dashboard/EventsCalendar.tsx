@@ -1,14 +1,31 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Calendar } from "@/components/ui/calendar";
 import { ChevronRight, MoreHorizontal } from "lucide-react";
+import { format } from "date-fns";
 
-const events = [
-  { date: "08 Jan, 2023", title: "School Annual Function" },
-  { date: "27 Jan, 2023", title: "Sport Competition" },
-];
+interface Exam {
+  id: string;
+  title: string;
+  exam_date: string;
+  exam_time?: string;
+  course_name?: string;
+}
 
-export function EventsCalendar() {
+interface EventsCalendarProps {
+  exams?: Exam[];
+}
+
+export function EventsCalendar({ exams = [] }: EventsCalendarProps) {
   const [date, setDate] = useState<Date | undefined>(new Date());
+
+  // Transform exams to events format
+  const events = useMemo(() => {
+    return exams.slice(0, 2).map((exam) => ({
+      date: format(new Date(exam.exam_date), "dd MMM, yyyy"),
+      title: exam.title || exam.course_name || "Exam",
+      exam: exam,
+    }));
+  }, [exams]);
 
   return (
     <div className="chart-card animate-fade-in" style={{ animationDelay: "0.2s" }}>
@@ -21,15 +38,21 @@ export function EventsCalendar() {
 
       {/* Upcoming Events */}
       <div className="flex gap-4 mb-4">
-        {events.map((event, index) => (
-          <div key={index} className="flex-1 p-3 bg-muted rounded-lg">
-            <p className="text-xs text-accent font-medium">{event.date}</p>
-            <div className="flex items-center justify-between mt-1">
-              <p className="text-sm font-medium text-foreground">{event.title}</p>
-              <ChevronRight className="w-4 h-4 text-muted-foreground" />
+        {events.length > 0 ? (
+          events.map((event, index) => (
+            <div key={index} className="flex-1 p-3 bg-muted rounded-lg">
+              <p className="text-xs text-accent font-medium">{event.date}</p>
+              <div className="flex items-center justify-between mt-1">
+                <p className="text-sm font-medium text-foreground">{event.title}</p>
+                <ChevronRight className="w-4 h-4 text-muted-foreground" />
+              </div>
             </div>
+          ))
+        ) : (
+          <div className="flex-1 p-3 bg-muted rounded-lg text-center">
+            <p className="text-sm text-muted-foreground">No upcoming exams</p>
           </div>
-        ))}
+        )}
       </div>
 
       {/* Calendar */}

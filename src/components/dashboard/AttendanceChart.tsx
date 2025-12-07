@@ -1,12 +1,19 @@
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 import { MoreHorizontal, Users } from "lucide-react";
 
-const data = [
-  { name: "Students", value: 84, color: "hsl(var(--primary))" },
-  { name: "Teachers", value: 91, color: "hsl(var(--accent))" },
-];
+interface AttendanceChartProps {
+  studentsPercentage?: number;
+  teachersPercentage?: number;
+}
 
-export function AttendanceChart() {
+export function AttendanceChart({ 
+  studentsPercentage = 0, 
+  teachersPercentage = 0 
+}: AttendanceChartProps) {
+  const data = [
+    { name: "Students", value: studentsPercentage, color: "hsl(var(--primary))" },
+    { name: "Teachers", value: teachersPercentage, color: "hsl(var(--accent))" },
+  ];
   return (
     <div className="chart-card animate-fade-in" style={{ animationDelay: "0.4s" }}>
       <div className="flex items-center justify-between mb-4">
@@ -51,11 +58,11 @@ export function AttendanceChart() {
       <div className="flex justify-center gap-8 mt-4">
         <div className="text-center">
           <p className="text-sm text-muted-foreground">Students</p>
-          <p className="text-xl font-bold text-primary">84%</p>
+          <p className="text-xl font-bold text-primary">{studentsPercentage}%</p>
         </div>
         <div className="text-center">
           <p className="text-sm text-muted-foreground">Teachers</p>
-          <p className="text-xl font-bold text-accent">91%</p>
+          <p className="text-xl font-bold text-accent">{teachersPercentage}%</p>
         </div>
       </div>
     </div>
