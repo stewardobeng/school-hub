@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>{{ $title ?? 'Dashboard' }} - School Hub</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @stack('styles')
+</head>
+<body class="min-h-screen bg-background">
+    @include('components.sidebar', ['userRole' => $userRole ?? 'admin'])
+    
+    <div class="ml-60">
+        @include('components.header', ['title' => $title ?? 'Dashboard'])
+        
+        <main class="p-6">
+            @yield('content')
+        </main>
+    </div>
+    
+    @stack('scripts')
+</body>
+</html>
+
